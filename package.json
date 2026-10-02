@@ -9,7 +9,7 @@
     "build": "node scripts/copy-runtime-assets.js && node scripts/generate-icons.js && vite build",
     "preview": "vite preview --host",
     "generate-icons": "node scripts/generate-icons.js",
-    "make-update": "node scripts/make-update.js",
+    "make-update": "node scripts/make-update.cjs",
     "deploy:gh-pages": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
-    "archiver": "^8.0.0",
+    "archiver": "^5.3.2",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
