@@ -1,0 +1,167 @@
+/* ============================================
+   全局样式入口
+   TailwindCSS 三层指令 + 自定义全局样式
+   ============================================ */
+
+/* Tailwind 基础层：重置样式 */
+@tailwind base;
+
+/* Tailwind 组件层：可复用的组件类 */
+@tailwind components;
+
+/* Tailwind 工具层：原子类 */
+@tailwind utilities;
+
+/* ============================================
+   自定义基础样式
+   ============================================ */
+@layer base {
+  html {
+    /* 禁止 iOS 点击高亮 */
+    -webkit-tap-highlight-color: transparent;
+    /* 平滑滚动 */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 14px;
+    line-height: 1.55;
+    /* 防止横向滚动 */
+    overflow-x: hidden;
+  }
+
+  /* 所有可点击元素移除默认轮廓，改用 focus-visible */
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  a:focus-visible {
+    @apply outline-none ring-2 ring-gold/50 ring-offset-2;
+  }
+
+  /* 数字等宽字体（金额显示用） */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 隐藏滚动条但保留滚动功能 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* iOS 安全区适配 */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ============================================
+   自定义组件类
+   ============================================ */
+@layer components {
+  /* 卡片容器 */
+  .card {
+    @apply bg-white rounded-xl border border-line shadow-card;
+  }
+
+  /* 主按钮 */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg
+           font-semibold text-sm transition-all duration-150
+           border border-line bg-white text-ink
+           hover:border-gray-300 hover:-translate-y-px hover:shadow-md
+           active:translate-y-0 active:shadow-sm
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none;
+    /* 触摸目标最小尺寸 */
+    min-height: 44px;
+  }
+
+  .btn-primary {
+    @apply bg-navy text-white border-navy hover:bg-navy-light hover:border-navy-light;
+  }
+
+  .btn-gold {
+    @apply bg-gold border-gold text-navy-dark hover:bg-gold-dark hover:border-gold-dark;
+  }
+
+  .btn-danger {
+    @apply text-expense border-expense/30 hover:bg-expense-light;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent border-transparent hover:bg-gray-100;
+  }
+
+  /* 表单控件 */
+  .form-control {
+    @apply w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-ink
+           placeholder:text-gray-400 transition-colors
+           focus:border-gold focus:ring-1 focus:ring-gold/30;
+    min-height: 44px;
+  }
+
+  /* 标签徽章 */
+  .tag {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold;
+  }
+  .tag-income {
+    @apply bg-income-light text-income;
+  }
+  .tag-expense {
+    @apply bg-expense-light text-expense;
+  }
+
+  /* 底部抽屉（移动端导入用） */
+  .bottom-sheet {
+    @apply fixed inset-x-0 bottom-0 bg-white rounded-t-2xl shadow-float
+           max-h-[90vh] flex flex-col z-50;
+    animation: slide-up 0.3s ease-out;
+  }
+
+  /* 遮罩层 */
+  .overlay {
+    @apply fixed inset-0 bg-black/50 z-40;
+    animation: fade-in 0.2s ease-out;
+  }
+}
+
+/* ============================================
+   自定义工具类
+   ============================================ */
+@layer utilities {
+  /* 文本截断（单行） */
+  .text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 文本截断（两行） */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ============================================
+   减少动画偏好（无障碍）
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
