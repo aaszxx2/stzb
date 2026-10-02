@@ -17,37 +17,16 @@
 <script setup>
 /**
  * 全局 Toast 提示组件
- * 通过 provide/inject 或全局事件总线调用
- * 使用方式：在任意组件中调用 useToast().show('消息')
+ * 从根组件 App.vue 注入 toastState（visible + message）进行渲染
+ * 调用方式：在任意子组件中 const toast = inject('toast'); toast.show('消息')
  */
 
-import { ref, provide } from 'vue'
+import { inject } from 'vue'
 
-const visible = ref(false)
-const message = ref('')
-let timer = null
-
-/**
- * 显示 Toast 提示
- * @param {string} msg - 提示消息
- * @param {number} duration - 显示时长（毫秒），默认 2500
- */
-function show(msg, duration = 2500) {
-  message.value = msg
-  visible.value = true
-  clearTimeout(timer)
-  timer = setTimeout(() => {
-    visible.value = false
-  }, duration)
-}
-
-// 提供给子组件使用
-provide('toast', { show })
-
-// 也挂载到全局（方便非组件中调用）
-if (typeof window !== 'undefined') {
-  window.$toast = { show }
-}
+// 从根组件注入状态（App.vue 中 provide 的 toastState）
+const toastState = inject('toastState', { visible: ref(false), message: ref('') })
+const visible = toastState.visible
+const message = toastState.message
 </script>
 
 <style scoped>

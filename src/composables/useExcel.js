@@ -326,17 +326,32 @@ export async function exportExcel({ opening, transactions, totals, computed }) {
 }
 
 /**
- * 触发浏览器下载
+ * 触发浏览器/ WebView 下载
+ * 兼容桌面浏览器、移动端浏览器和 Capacitor WebView
  * @param {Blob} blob - 文件 Blob
  * @param {string} name - 文件名
  */
 export function downloadBlob(blob, name) {
-  const a = document.createElement('a')
-  const url = URL.createObjectURL(blob)
-  a.href = url
-  a.download = name
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  setTimeout(() => URL.revokeObjectURL(url), 1500)
+  try {
+    const a = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    a.href = url
+    a.download = name
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 1500)
+    return true
+  } catch (e) {
+    console.warn('标准下载失败，尝试备选方案', e)
+  }
+  try {
+    const reader = new FileReader()
+    reader.onload = () => { window.open(reader.result, '_blank') }
+    reader.readAsDataURL(blob)
+    return true
+  } catch (e) {
+    console.error('下载失败', e)
+    return false
+  }
 }
