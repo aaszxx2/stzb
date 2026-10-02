@@ -45,11 +45,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Generate hot-update package
-        # 自动生成热更新包，版本号用 2.0.构建号
-        # APK 启动后会检测到此版本并提示更新
-        run: npm run make-update -- 2.0.${{ github.run_number }}
-
       - name: Add SPA 404 fallback
         # GitHub Pages 不支持服务端路由回退，复制 index.html 为 404.html
         run: cp dist/index.html dist/404.html
